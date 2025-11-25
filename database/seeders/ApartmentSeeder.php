@@ -1,0 +1,142 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Apartment;
+use Illuminate\Database\Seeder;
+
+class ApartmentSeeder extends Seeder
+{
+    /**
+     * Run the database seeder.
+     */
+    public function run(): void
+    {
+        $apartments = [
+            [
+                'name' => 'Sunset Residence A101',
+                'location_text' => 'Building A - First Floor',
+                'location_link' => 'https://maps.google.com/?q=Sunset+Residence+A101',
+                'floor_plan' => 'documents/floor-plans/a101.pdf',
+                'ownership_document' => 'documents/ownership/a101.pdf',
+                'important_files' => ['safety_certificate_a101.pdf', 'insurance_policy_a101.pdf'],
+                'bedrooms' => 2,
+                'living_rooms' => 1,
+                'guest_rooms' => 0,
+                'kitchens' => 1,
+                'bathrooms' => 1,
+                'balconies' => 1,
+                'master_rooms' => 1,
+                'furniture' => ['Sofa', 'Dining Table', 'Wardrobe'],
+                'notes' => 'Recently repainted and furnished.',
+                'apartment_number' => 'A101',
+                'floor_number' => 1,
+                'square_meters' => 85.5,
+                'rent_price' => 1200.00,
+                'location' => 'Building A - First Floor',
+                'description' => 'Cozy 2-bedroom apartment with modern amenities.',
+                'is_available' => false,
+            ],
+            [
+                'name' => 'Harbor View A102',
+                'location_text' => 'Building A - First Floor',
+                'location_link' => 'https://maps.google.com/?q=Harbor+View+A102',
+                'floor_plan' => 'documents/floor-plans/a102.pdf',
+                'ownership_document' => 'documents/ownership/a102.pdf',
+                'important_files' => ['fire_certificate_a102.pdf'],
+                'bedrooms' => 1,
+                'living_rooms' => 1,
+                'guest_rooms' => 0,
+                'kitchens' => 1,
+                'bathrooms' => 1,
+                'balconies' => 0,
+                'master_rooms' => 1,
+                'furniture' => ['Bed', 'Work Desk'],
+                'notes' => 'Ideal for single professionals.',
+                'apartment_number' => 'A102',
+                'floor_number' => 1,
+                'square_meters' => 65.0,
+                'rent_price' => 950.00,
+                'location' => 'Building A - First Floor',
+                'description' => 'Studio apartment perfect for singles.',
+                'is_available' => true,
+            ],
+            [
+                'name' => 'Cityline B201',
+                'location_text' => 'Building B - Second Floor',
+                'location_link' => 'https://maps.google.com/?q=Cityline+B201',
+                'floor_plan' => 'documents/floor-plans/b201.pdf',
+                'ownership_document' => 'documents/ownership/b201.pdf',
+                'important_files' => ['energy_certificate_b201.pdf', 'insurance_b201.pdf'],
+                'bedrooms' => 3,
+                'living_rooms' => 1,
+                'guest_rooms' => 1,
+                'kitchens' => 1,
+                'bathrooms' => 2,
+                'balconies' => 2,
+                'master_rooms' => 1,
+                'furniture' => ['Sectional Sofa', 'King Bed', 'Office Desk'],
+                'notes' => 'Families love the double balcony.',
+                'apartment_number' => 'B201',
+                'floor_number' => 2,
+                'square_meters' => 120.0,
+                'rent_price' => 1800.00,
+                'location' => 'Building B - Second Floor',
+                'description' => 'Spacious 3-bedroom apartment with balcony.',
+                'is_available' => false,
+            ],
+            [
+                'name' => 'Garden Loft B202',
+                'location_text' => 'Building B - Second Floor',
+                'location_link' => 'https://maps.google.com/?q=Garden+Loft+B202',
+                'floor_plan' => 'documents/floor-plans/b202.pdf',
+                'ownership_document' => 'documents/ownership/b202.pdf',
+                'important_files' => ['hoa_rules_b202.pdf'],
+                'bedrooms' => 2,
+                'living_rooms' => 1,
+                'guest_rooms' => 1,
+                'kitchens' => 1,
+                'bathrooms' => 1,
+                'balconies' => 1,
+                'master_rooms' => 1,
+                'furniture' => ['Outdoor Set', 'Smart TV'],
+                'notes' => 'Includes rooftop garden access.',
+                'apartment_number' => 'B202',
+                'floor_number' => 2,
+                'square_meters' => 90.0,
+                'rent_price' => 1350.00,
+                'location' => 'Building B - Second Floor',
+                'description' => '2-bedroom with city view.',
+                'is_available' => true,
+            ],
+            [
+                'name' => 'Skyline C301',
+                'location_text' => 'Building C - Third Floor',
+                'location_link' => 'https://maps.google.com/?q=Skyline+C301',
+                'floor_plan' => 'documents/floor-plans/c301.pdf',
+                'ownership_document' => 'documents/ownership/c301.pdf',
+                'important_files' => ['inspection_report_c301.pdf', 'insurance_c301.pdf'],
+                'bedrooms' => 2,
+                'living_rooms' => 1,
+                'guest_rooms' => 0,
+                'kitchens' => 1,
+                'bathrooms' => 2,
+                'balconies' => 2,
+                'master_rooms' => 1,
+                'furniture' => ['Built-in Wardrobes', 'Kitchen Island'],
+                'notes' => 'Corner unit with skyline views.',
+                'apartment_number' => 'C301',
+                'floor_number' => 3,
+                'square_meters' => 95.0,
+                'rent_price' => 1400.00,
+                'location' => 'Building C - Third Floor',
+                'description' => 'Modern 2-bedroom with 2 bathrooms.',
+                'is_available' => false,
+            ],
+        ];
+
+        foreach ($apartments as $apartment) {
+            Apartment::create($apartment);
+        }
+    }
+}
