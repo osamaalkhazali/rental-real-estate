@@ -48,7 +48,7 @@
                         <div>
                             <p class="text-gray-500">Amount</p>
                             <p class="font-semibold text-gray-900 dark:text-gray-100">
-                                ${{ number_format($expense->amount, 2) }}</p>
+                                JOD {{ number_format($expense->amount, 2) }}</p>
                         </div>
                         <div>
                             <p class="text-gray-500">Vendor</p>

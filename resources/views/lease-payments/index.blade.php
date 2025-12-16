@@ -60,9 +60,9 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             {{ $payment->due_date->format('M d, Y') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            ${{ number_format($payment->amount_due, 2) }}</td>
+                                            JOD {{ number_format($payment->amount_due, 2) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            {{ $payment->amount_paid ? '$' . number_format($payment->amount_paid, 2) : 'N/A' }}
+                                            {{ $payment->amount_paid ? 'JOD ' . number_format($payment->amount_paid, 2) : 'N/A' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             <span

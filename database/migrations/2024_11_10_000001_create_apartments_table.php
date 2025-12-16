@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('apartment_number')->unique();
             $table->integer('floor_number')->nullable();
             $table->decimal('square_meters', 8, 2)->nullable();
+            $table->decimal('purchase_price', 10, 2)->nullable();
             $table->decimal('rent_price', 10, 2);
             $table->string('location')->nullable();
             $table->text('description')->nullable();

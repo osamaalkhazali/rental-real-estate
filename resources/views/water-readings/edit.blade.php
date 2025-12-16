@@ -61,7 +61,7 @@
                             </div>
 
                             <div>
-                                <label for="cost" class="block text-sm font-medium mb-2">Cost *</label>
+                                <label for="cost" class="block text-sm font-medium mb-2">Cost (JOD) *</label>
                                 <input type="number" step="0.01" name="cost" id="cost" required
                                     value="{{ old('cost', $waterReading->cost) }}"
                                     class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">

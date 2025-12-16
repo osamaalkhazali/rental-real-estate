@@ -39,12 +39,12 @@
                                 <div class="flex">
                                     <dt class="font-medium w-1/3">Amount Due:</dt>
                                     <dd class="text-red-600 dark:text-red-400 font-bold">
-                                        ${{ number_format($leasePayment->amount_due, 2) }}</dd>
+                                        JOD {{ number_format($leasePayment->amount_due, 2) }}</dd>
                                 </div>
                                 <div class="flex">
                                     <dt class="font-medium w-1/3">Amount Paid:</dt>
                                     <dd class="text-green-600 dark:text-green-400 font-bold">
-                                        {{ $leasePayment->amount_paid ? '$' . number_format($leasePayment->amount_paid, 2) : 'N/A' }}
+                                        {{ $leasePayment->amount_paid ? 'JOD ' . number_format($leasePayment->amount_paid, 2) : 'N/A' }}
                                     </dd>
                                 </div>
                                 <div class="flex">
@@ -76,7 +76,7 @@
                                         <dt class="font-medium w-1/3">Balance:</dt>
                                         <dd
                                             class="font-bold {{ $leasePayment->amount_paid >= $leasePayment->amount_due ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                            ${{ number_format($leasePayment->amount_due - $leasePayment->amount_paid, 2) }}
+                                            JOD {{ number_format($leasePayment->amount_due - $leasePayment->amount_paid, 2) }}
                                         </dd>
                                     </div>
                                 @endif

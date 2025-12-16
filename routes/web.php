@@ -10,6 +10,7 @@ use App\Http\Controllers\WaterReadingController;
 use App\Http\Controllers\ElectricServiceController;
 use App\Http\Controllers\ElectricReadingController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\Reports\ApartmentRoiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -48,6 +49,10 @@ Route::middleware('auth')->group(function () {
 
     // Expenses
     Route::resource('expenses', ExpenseController::class);
+
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/apartments-roi', [ApartmentRoiController::class, 'index'])->name('apartments.roi');
+    });
 });
 
 require __DIR__.'/auth.php';

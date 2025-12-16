@@ -60,7 +60,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $apartment->bedrooms }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $apartment->bathrooms }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                            ${{ number_format($apartment->rent_price, 2) }}</td>
+                                            JOD {{ number_format($apartment->rent_price, 2) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             <span
                                                 class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full

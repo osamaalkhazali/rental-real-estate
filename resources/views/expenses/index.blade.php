@@ -74,7 +74,7 @@
                                             {{ $expense->expense_date?->format('Y-m-d') }}</td>
                                         <td
                                             class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                            ${{ number_format($expense->amount, 2) }}
+                                            JOD {{ number_format($expense->amount, 2) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             {{ $expense->lease?->tenant_name ?? '—' }}</td>

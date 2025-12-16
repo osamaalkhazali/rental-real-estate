@@ -76,7 +76,7 @@
                 class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100" />
         </div>
         <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount (USD)<span
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount (JOD)<span
                     class="text-red-500">*</span></label>
             <input type="number" step="0.01" min="0" name="amount"
                 value="{{ old('amount', $expense->amount ?? '') }}" required

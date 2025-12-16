@@ -96,7 +96,7 @@
                                                 </td>
                                                 <td class="px-6 py-4 text-sm">
                                                     {{ number_format($reading->reading_value, 2) }}</td>
-                                                <td class="px-6 py-4 text-sm">${{ number_format($reading->cost, 2) }}</td>
+                                                <td class="px-6 py-4 text-sm">JOD {{ number_format($reading->cost, 2) }}</td>
                                                 <td class="px-6 py-4 text-sm">
                                                     <span
                                                         class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $reading->is_paid ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">

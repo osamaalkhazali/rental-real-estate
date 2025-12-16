@@ -80,7 +80,7 @@
                                 <div class="flex">
                                     <dt class="font-medium w-1/3">Deposit Amount:</dt>
                                     <dd class="text-green-600 dark:text-green-400 font-bold">
-                                        {{ $lease->deposit_amount ? '$' . number_format($lease->deposit_amount, 2) : 'N/A' }}
+                                        {{ $lease->deposit_amount ? 'JOD ' . number_format($lease->deposit_amount, 2) : 'N/A' }}
                                     </dd>
                                 </div>
                             </dl>
@@ -177,7 +177,7 @@
                                                                 {{ number_format($entry['reading']->reading_value, 2) }}
                                                             </td>
                                                             <td class="px-4 py-2">
-                                                                ${{ number_format($entry['reading']->cost, 2) }}</td>
+                                                                JOD {{ number_format($entry['reading']->cost, 2) }}</td>
                                                             <td class="px-4 py-2">
                                                                 <span
                                                                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $entry['reading']->is_paid ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
@@ -229,7 +229,7 @@
                                                                 {{ number_format($entry['reading']->reading_value, 2) }}
                                                             </td>
                                                             <td class="px-4 py-2">
-                                                                ${{ number_format($entry['reading']->cost, 2) }}</td>
+                                                                JOD {{ number_format($entry['reading']->cost, 2) }}</td>
                                                             <td class="px-4 py-2">
                                                                 <span
                                                                     class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $entry['reading']->is_paid ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">

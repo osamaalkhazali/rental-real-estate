@@ -59,14 +59,14 @@
                             </div>
 
                             <div>
-                                <label for="amount_due" class="block text-sm font-medium mb-2">Amount Due *</label>
+                                <label for="amount_due" class="block text-sm font-medium mb-2">Amount Due (JOD) *</label>
                                 <input type="number" step="0.01" name="amount_due" id="amount_due"
                                     value="{{ old('amount_due', $leasePayment->amount_due) }}" required
                                     class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             </div>
 
                             <div>
-                                <label for="amount_paid" class="block text-sm font-medium mb-2">Amount Paid</label>
+                                <label for="amount_paid" class="block text-sm font-medium mb-2">Amount Paid (JOD)</label>
                                 <input type="number" step="0.01" name="amount_paid" id="amount_paid"
                                     value="{{ old('amount_paid', $leasePayment->amount_paid) }}"
                                     class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">

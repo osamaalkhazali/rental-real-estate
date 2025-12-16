@@ -43,8 +43,10 @@
             </div>
 
             <!-- Sidebar Navigation -->
-            <nav class="flex-1 px-4 py-6 overflow-y-auto scrollbar-hide">
-                <!-- Dashboard -->
+            <nav class="flex-1 px-4 py-6 overflow-y-auto scrollbar-hide space-y-4">
+                <div>
+                    <p class="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Operations</p>
+                    <!-- Dashboard -->
                 <a href="{{ route('dashboard') }}"
                     class="flex items-center px-4 py-3 mb-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 {{ request()->routeIs('dashboard') ? 'bg-blue-100 dark:bg-gray-700 text-blue-700 dark:text-blue-400' : '' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,6 +67,10 @@
                     </svg>
                     <span class="ml-3 font-medium">Apartments</span>
                 </a>
+                </div>
+
+                <div>
+                    <p class="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Leasing</p>
 
                 <!-- Leases Dropdown -->
                 <div x-data="{ open: {{ request()->routeIs('leases.*') || request()->routeIs('lease-payments.*') ? 'true' : 'false' }} }">
@@ -105,9 +111,10 @@
                     </svg>
                     <span class="ml-3 font-medium">Expenses</span>
                 </a>
+                </div>
 
-                <!-- Divider -->
-                <div class="my-4 border-t border-gray-200 dark:border-gray-700"></div>
+                <div>
+                    <p class="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Utilities</p>
 
                 <!-- Water Management Dropdown -->
                 <div x-data="{ open: {{ request()->routeIs('water-services.*') || request()->routeIs('water-readings.*') ? 'true' : 'false' }} }">
@@ -167,23 +174,25 @@
                         </a>
                     </div>
                 </div>
+                </div>
 
-                <!-- Divider -->
-                <div class="my-4 border-t border-gray-200 dark:border-gray-700"></div>
+                <div>
+                    <p class="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Analytics</p>
 
                 <!-- Reports -->
-                <a href="#"
-                    class="flex items-center px-4 py-3 mb-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700">
+                <a href="{{ route('reports.apartments.roi') }}"
+                    class="flex items-center px-4 py-3 mb-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 {{ request()->routeIs('reports.*') ? 'bg-blue-100 dark:bg-gray-700 text-blue-700 dark:text-blue-400' : '' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                         </path>
                     </svg>
-                    <span class="ml-3 font-medium">Reports</span>
+                    <span class="ml-3 font-medium">Investment Performance</span>
                 </a>
+                </div>
 
-                <!-- Divider -->
-                <div class="my-4 border-t border-gray-200 dark:border-gray-700"></div>
+                <div>
+                    <p class="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">Administration</p>
 
                 <!-- Settings -->
                 <a href="#"
@@ -197,6 +206,7 @@
                     </svg>
                     <span class="ml-3 font-medium">Settings</span>
                 </a>
+                </div>
             </nav>
 
             <!-- User Profile Section -->
@@ -290,6 +300,8 @@
             </main>
         </div>
     </div>
+
+    @stack('scripts')
 </body>
 
 </html>

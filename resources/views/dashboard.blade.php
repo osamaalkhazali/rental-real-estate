@@ -51,8 +51,8 @@
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Monthly Revenue</p>
                     <p class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                        ${{ number_format($monthlyRevenue, 2) }}</p>
-                    <p class="text-xs text-green-600 dark:text-green-400 mt-1">${{ number_format($paidPayments, 2) }}
+                        JOD {{ number_format($monthlyRevenue, 2) }}</p>
+                    <p class="text-xs text-green-600 dark:text-green-400 mt-1">JOD {{ number_format($paidPayments, 2) }}
                         collected</p>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Pending Payments</p>
                     <p class="text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ $pendingPayments }}</p>
-                    <p class="text-xs text-red-600 dark:text-red-400 mt-1">${{ number_format($totalPendingAmount, 2) }} due
+                    <p class="text-xs text-red-600 dark:text-red-400 mt-1">JOD {{ number_format($totalPendingAmount, 2) }} due
                     </p>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="text-right">
                                     <p class="font-semibold text-gray-700 dark:text-gray-200">
-                                        ${{ number_format($lease->rent_amount, 2) }}</p>
+                                        JOD {{ number_format($lease->rent_amount, 2) }}</p>
                                     @php
                                         $statusClass =
                                             $lease->payment_status === 'paid'
@@ -255,7 +255,7 @@
             data: {
                 labels: {!! json_encode(array_column($monthlyRevenueData, 'month')) !!},
                 datasets: [{
-                    label: 'Revenue ($)',
+                    label: 'Revenue (JOD)',
                     data: {!! json_encode(array_column($monthlyRevenueData, 'revenue')) !!},
                     borderColor: 'rgb(59, 130, 246)',
                     backgroundColor: 'rgba(59, 130, 246, 0.1)',
@@ -276,7 +276,7 @@
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                return '$' + value.toLocaleString();
+                                return 'JOD ' + value.toLocaleString();
                             }
                         }
                     }
@@ -313,14 +313,14 @@
             data: {
                 labels: {!! json_encode(array_column($utilityCostsData, 'month')) !!},
                 datasets: [{
-                        label: 'Water ($)',
+                    label: 'Water (JOD)',
                         data: {!! json_encode(array_column($utilityCostsData, 'water')) !!},
                         backgroundColor: 'rgba(59, 130, 246, 0.7)',
                         borderColor: 'rgb(59, 130, 246)',
                         borderWidth: 1
                     },
                     {
-                        label: 'Electric ($)',
+                        label: 'Electric (JOD)',
                         data: {!! json_encode(array_column($utilityCostsData, 'electric')) !!},
                         backgroundColor: 'rgba(250, 204, 21, 0.7)',
                         borderColor: 'rgb(250, 204, 21)',
@@ -341,7 +341,7 @@
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                return '$' + value.toLocaleString();
+                                return 'JOD ' + value.toLocaleString();
                             }
                         }
                     }

@@ -120,7 +120,7 @@
                                 <div class="flex">
                                     <dt class="font-medium w-1/3">Rent Price:</dt>
                                     <dd class="text-green-600 dark:text-green-400 font-bold">
-                                        ${{ number_format($apartment->rent_price, 2) }}</dd>
+                                        JOD {{ number_format($apartment->rent_price, 2) }}</dd>
                                 </div>
                             </dl>
                         </div>
@@ -192,9 +192,9 @@
                                                 </div>
                                                 <div class="flex justify-between">
                                                     <dt class="text-gray-500 dark:text-gray-400">Last Cost</dt>
-                                                    <dd>
-                                                        {{ $lastReading?->cost ? '$' . number_format($lastReading->cost, 2) : 'N/A' }}
-                                                    </dd>
+                                                        <dd>
+                                                            {{ $lastReading?->cost ? 'JOD ' . number_format($lastReading->cost, 2) : 'N/A' }}
+                                                        </dd>
                                                 </div>
                                                 <div class="flex justify-between">
                                                     <dt class="text-gray-500 dark:text-gray-400">Reading Date</dt>
@@ -244,9 +244,9 @@
                                                 </div>
                                                 <div class="flex justify-between">
                                                     <dt class="text-gray-500 dark:text-gray-400">Last Cost</dt>
-                                                    <dd>
-                                                        {{ $lastReading?->cost ? '$' . number_format($lastReading->cost, 2) : 'N/A' }}
-                                                    </dd>
+                                                        <dd>
+                                                            {{ $lastReading?->cost ? 'JOD ' . number_format($lastReading->cost, 2) : 'N/A' }}
+                                                        </dd>
                                                 </div>
                                                 <div class="flex justify-between">
                                                     <dt class="text-gray-500 dark:text-gray-400">Reading Date</dt>
@@ -429,12 +429,12 @@
                                             </div>
                                             <div>
                                                 <p class="text-gray-500 dark:text-gray-400">Rent Amount</p>
-                                                <p class="font-medium">${{ number_format($lease->rent_amount, 2) }}</p>
+                                                <p class="font-medium">JOD {{ number_format($lease->rent_amount, 2) }}</p>
                                             </div>
                                             <div>
                                                 <p class="text-gray-500 dark:text-gray-400">Deposit</p>
                                                 <p class="font-medium">
-                                                    {{ $lease->deposit_amount ? '$' . number_format($lease->deposit_amount, 2) : 'N/A' }}
+                                                    {{ $lease->deposit_amount ? 'JOD ' . number_format($lease->deposit_amount, 2) : 'N/A' }}
                                                 </p>
                                             </div>
                                         </div>
@@ -479,9 +479,9 @@
                                                                         {{ optional($payment->due_date)->format('M d, Y') }}
                                                                     </td>
                                                                     <td class="px-4 py-2">
-                                                                        ${{ number_format($payment->amount_due, 2) }}</td>
+                                                                        JOD {{ number_format($payment->amount_due, 2) }}</td>
                                                                     <td class="px-4 py-2">
-                                                                        {{ $payment->amount_paid ? '$' . number_format($payment->amount_paid, 2) : '—' }}
+                                                                        {{ $payment->amount_paid ? 'JOD ' . number_format($payment->amount_paid, 2) : '—' }}
                                                                     </td>
                                                                     <td class="px-4 py-2">
                                                                         <span
@@ -538,8 +538,8 @@
                                                                             {{ number_format($entry['reading']->reading_value, 2) }}
                                                                         </td>
                                                                         <td class="px-4 py-2">
-                                                                            ${{ number_format($entry['reading']->cost, 2) }}
-                                                                        </td>
+                                                                                JOD {{ number_format($entry['reading']->cost, 2) }}
+                                                                            </td>
                                                                         <td class="px-4 py-2">
                                                                             <span
                                                                                 class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $entry['reading']->is_paid ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
@@ -593,8 +593,8 @@
                                                                             {{ number_format($entry['reading']->reading_value, 2) }}
                                                                         </td>
                                                                         <td class="px-4 py-2">
-                                                                            ${{ number_format($entry['reading']->cost, 2) }}
-                                                                        </td>
+                                                                                JOD {{ number_format($entry['reading']->cost, 2) }}
+                                                                            </td>
                                                                         <td class="px-4 py-2">
                                                                             <span
                                                                                 class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $entry['reading']->is_paid ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
