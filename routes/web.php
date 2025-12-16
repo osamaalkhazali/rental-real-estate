@@ -11,6 +11,7 @@ use App\Http\Controllers\ElectricServiceController;
 use App\Http\Controllers\ElectricReadingController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\Reports\ApartmentRoiController;
+use App\Http\Controllers\PrivateFileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -53,6 +54,13 @@ Route::middleware('auth')->group(function () {
     Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('/apartments-roi', [ApartmentRoiController::class, 'index'])->name('apartments.roi');
     });
+    // Private file serving
+    Route::get('/files/{path}', [PrivateFileController::class, 'show'])
+        ->where('path', '.*')
+        ->name('private.file');
+    Route::get('/files/view/{path}', [PrivateFileController::class, 'stream'])
+        ->where('path', '.*')
+        ->name('private.file.view');
 });
 
 require __DIR__.'/auth.php';

@@ -114,7 +114,7 @@
                                 @if ($lease->tenant_image)
                                     <div>
                                         <p class="text-sm font-medium mb-2">Tenant Photo (صورة المستأجر)</p>
-                                        <img src="{{ asset('storage/' . $lease->tenant_image) }}" alt="Tenant Photo"
+                                        <img src="{{ route('private.file.view', $lease->tenant_image) }}" alt="Tenant Photo"
                                             class="w-full h-48 object-cover rounded shadow">
                                     </div>
                                 @endif
@@ -122,7 +122,7 @@
                                 @if ($lease->national_id_image)
                                     <div>
                                         <p class="text-sm font-medium mb-2">National ID (الهوية)</p>
-                                        <img src="{{ asset('storage/' . $lease->national_id_image) }}" alt="National ID"
+                                        <img src="{{ route('private.file.view', $lease->national_id_image) }}" alt="National ID"
                                             class="w-full h-48 object-cover rounded shadow">
                                     </div>
                                 @endif
@@ -130,7 +130,7 @@
                                 @if ($lease->lease_document)
                                     <div>
                                         <p class="text-sm font-medium mb-2">Lease Document (ملف العقد)</p>
-                                        <a href="{{ asset('storage/' . $lease->lease_document) }}" target="_blank"
+                                        <a href="{{ route('private.file', $lease->lease_document) }}" target="_blank"
                                             class="text-blue-600 hover:text-blue-900 dark:text-blue-400">
                                             View Document (عرض الملف)
                                         </a>

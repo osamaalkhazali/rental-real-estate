@@ -76,7 +76,7 @@
                             @if ($waterReading->image_path)
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium mb-2">Current Meter Photo</label>
-                                    <img src="{{ asset('storage/' . $waterReading->image_path) }}" alt="Meter Reading"
+                                    <img src="{{ route('private.file.view', $waterReading->image_path) }}" alt="Meter Reading"
                                         class="w-64 h-48 object-cover rounded">
                                 </div>
                             @endif

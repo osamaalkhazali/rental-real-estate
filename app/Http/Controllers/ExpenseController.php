@@ -29,10 +29,18 @@ class ExpenseController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $this->validateExpense($request);
-        $data['attachments'] = $this->normalizeAttachments($request->string('attachments')->toString());
 
         if ($request->hasFile('receipt_file')) {
-            $data['receipt_file'] = $request->file('receipt_file')->store('expenses/receipts', 'public');
+            $data['receipt_file'] = $request->file('receipt_file')->store('expenses/receipts', 'private');
+        }
+
+        // Handle file attachments
+        if ($request->hasFile('attachments')) {
+            $attachmentPaths = [];
+            foreach ($request->file('attachments') as $file) {
+                $attachmentPaths[] = $file->store('expenses/attachments', 'private');
+            }
+            $data['attachments'] = $attachmentPaths;
         }
 
         Expense::create($data);
@@ -58,16 +66,33 @@ class ExpenseController extends Controller
     public function update(Request $request, Expense $expense): RedirectResponse
     {
         $data = $this->validateExpense($request);
-        $data['attachments'] = $this->normalizeAttachments($request->string('attachments')->toString());
 
         if ($request->hasFile('receipt_file')) {
             if ($expense->receipt_file) {
-                Storage::disk('public')->delete($expense->receipt_file);
+                Storage::disk('private')->delete($expense->receipt_file);
             }
 
-            $data['receipt_file'] = $request->file('receipt_file')->store('expenses/receipts', 'public');
+            $data['receipt_file'] = $request->file('receipt_file')->store('expenses/receipts', 'private');
         } else {
             unset($data['receipt_file']);
+        }
+
+        // Handle file attachments
+        if ($request->hasFile('attachments')) {
+            // Delete old attachments
+            if (!empty($expense->attachments)) {
+                foreach ($expense->attachments as $oldAttachment) {
+                    Storage::disk('private')->delete($oldAttachment);
+                }
+            }
+
+            $attachmentPaths = [];
+            foreach ($request->file('attachments') as $file) {
+                $attachmentPaths[] = $file->store('expenses/attachments', 'private');
+            }
+            $data['attachments'] = $attachmentPaths;
+        } else {
+            unset($data['attachments']);
         }
 
         $expense->update($data);
@@ -78,7 +103,14 @@ class ExpenseController extends Controller
     public function destroy(Expense $expense): RedirectResponse
     {
         if ($expense->receipt_file) {
-            Storage::disk('public')->delete($expense->receipt_file);
+            Storage::disk('private')->delete($expense->receipt_file);
+        }
+
+        // Delete attachments
+        if (!empty($expense->attachments)) {
+            foreach ($expense->attachments as $attachment) {
+                Storage::disk('private')->delete($attachment);
+            }
         }
 
         $expense->delete();
@@ -98,7 +130,8 @@ class ExpenseController extends Controller
             'amount' => 'required|numeric|min:0',
             'vendor_name' => 'nullable|string|max:255',
             'receipt_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
-            'attachments' => 'nullable|string',
+            'attachments' => 'nullable|array',
+            'attachments.*' => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:10240',
             'notes' => 'nullable|string',
         ]);
     }

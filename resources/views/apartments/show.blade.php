@@ -50,11 +50,25 @@
                                 </div>
                                 <div class="flex">
                                     <dt class="font-medium w-1/3">Floor Plan (مخطط الطابق):</dt>
-                                    <dd>{{ $apartment->floor_plan ?? 'N/A' }}</dd>
+                                    <dd>
+                                        @if ($apartment->floor_plan)
+                                            <a href="{{ route('private.file', $apartment->floor_plan) }}" target="_blank"
+                                                class="text-blue-600 dark:text-blue-400 underline">{{ basename($apartment->floor_plan) }}</a>
+                                        @else
+                                            N/A
+                                        @endif
+                                    </dd>
                                 </div>
                                 <div class="flex">
                                     <dt class="font-medium w-1/3">Ownership Document (سند الملكية):</dt>
-                                    <dd>{{ $apartment->ownership_document ?? 'N/A' }}</dd>
+                                    <dd>
+                                        @if ($apartment->ownership_document)
+                                            <a href="{{ route('private.file', $apartment->ownership_document) }}" target="_blank"
+                                                class="text-blue-600 dark:text-blue-400 underline">{{ basename($apartment->ownership_document) }}</a>
+                                        @else
+                                            N/A
+                                        @endif
+                                    </dd>
                                 </div>
                                 <div class="flex">
                                     <dt class="font-medium w-1/3">Important Files (ملفات مهمة):</dt>
@@ -62,7 +76,10 @@
                                         @if ($apartment->important_files)
                                             <ul class="list-disc list-inside space-y-1 text-sm">
                                                 @foreach ($apartment->important_files as $file)
-                                                    <li>{{ $file }}</li>
+                                                    <li>
+                                                        <a href="{{ route('private.file', $file) }}" target="_blank"
+                                                            class="text-blue-600 dark:text-blue-400 underline">{{ basename($file) }}</a>
+                                                    </li>
                                                 @endforeach
                                             </ul>
                                         @else

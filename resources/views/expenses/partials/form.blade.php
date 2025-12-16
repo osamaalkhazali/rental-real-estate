@@ -96,7 +96,7 @@
                 class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100" />
             @if (!empty($expense?->receipt_file))
                 <p class="text-xs text-gray-500 mt-1">Current: <a
-                        href="{{ asset('storage/' . $expense->receipt_file) }}" target="_blank"
+                        href="{{ route('private.file', $expense->receipt_file) }}" target="_blank"
                         class="text-blue-600 dark:text-blue-400 underline">Download</a></p>
             @endif
         </div>
@@ -109,17 +109,23 @@
     </div>
 
     <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Attachments (المرفقات) (comma or newline
-            separated URLs)</label>
-        @php
-            $attachmentText = old('attachments');
-            if ($attachmentText === null && isset($expense) && is_array($expense->attachments)) {
-                $attachmentText = implode("\n", $expense->attachments);
-            }
-        @endphp
-        <textarea name="attachments" rows="3"
-            class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100">{{ $attachmentText }}</textarea>
-        <p class="text-xs text-gray-500 mt-1">Leave blank if there are no extra files or photo links.</p>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Attachments (المرفقات)</label>
+        <input type="file" name="attachments[]" multiple
+            class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100" />
+        <p class="text-xs text-gray-500 mt-1">You can select multiple files (images, PDFs, etc.)</p>
+        @if (!empty($expense?->attachments))
+            <div class="mt-2">
+                <p class="text-xs text-gray-500 mb-1">Current attachments:</p>
+                <ul class="list-disc list-inside text-sm">
+                    @foreach ($expense->attachments as $attachment)
+                        <li>
+                            <a href="{{ route('private.file', $attachment) }}" target="_blank"
+                                class="text-blue-600 dark:text-blue-400 underline">{{ basename($attachment) }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </div>
 
     <div>

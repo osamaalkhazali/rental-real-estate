@@ -96,7 +96,7 @@
                             @if ($lease->tenant_image)
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium mb-2">Current Tenant Photo (صورة المستأجر الحالية)</label>
-                                    <img src="{{ asset('storage/' . $lease->tenant_image) }}" alt="Tenant Photo"
+                                    <img src="{{ route('private.file.view', $lease->tenant_image) }}" alt="Tenant Photo"
                                         class="w-32 h-32 object-cover rounded">
                                 </div>
                             @endif

@@ -57,7 +57,7 @@
                         <div>
                             <p class="text-gray-500">Receipt (الإيصال)</p>
                             @if ($expense->receipt_file)
-                                <a href="{{ asset('storage/' . $expense->receipt_file) }}" target="_blank"
+                                <a href="{{ route('private.file', $expense->receipt_file) }}" target="_blank"
                                     class="text-blue-600 dark:text-blue-400 underline">View Receipt</a>
                             @else
                                 <p class="font-semibold text-gray-900 dark:text-gray-100">—</p>
@@ -76,8 +76,8 @@
                         @if (!empty($expense->attachments))
                             <ul class="list-disc list-inside text-blue-600 dark:text-blue-400">
                                 @foreach ($expense->attachments as $attachment)
-                                    <li><a href="{{ $attachment }}" target="_blank"
-                                            class="underline">{{ $attachment }}</a></li>
+                                    <li><a href="{{ route('private.file', $attachment) }}" target="_blank"
+                                            class="underline">{{ basename($attachment) }}</a></li>
                                 @endforeach
                             </ul>
                         @else

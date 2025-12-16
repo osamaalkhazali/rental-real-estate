@@ -80,9 +80,10 @@ class ApartmentController extends Controller
             'name' => 'required|string|max:255',
             'location_text' => 'required|string|max:255',
             'location_link' => 'required|url|max:255',
-            'floor_plan' => 'nullable|string|max:255',
-            'ownership_document' => 'nullable|string|max:255',
-            'important_files' => 'nullable|string',
+            'floor_plan' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'ownership_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'important_files' => 'nullable|array',
+            'important_files.*' => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:10240',
             'apartment_number' => [
                 'required',
                 'string',
@@ -110,7 +111,31 @@ class ApartmentController extends Controller
 
         $validated['is_available'] = $request->boolean('is_available');
         $validated['furniture'] = $this->normalizeDelimitedInput($request->input('furniture'));
-        $validated['important_files'] = $this->normalizeDelimitedInput($request->input('important_files'));
+
+        // Handle floor_plan upload
+        if ($request->hasFile('floor_plan')) {
+            $validated['floor_plan'] = $request->file('floor_plan')->store('apartments/floor-plans', 'private');
+        } else {
+            unset($validated['floor_plan']);
+        }
+
+        // Handle ownership_document upload
+        if ($request->hasFile('ownership_document')) {
+            $validated['ownership_document'] = $request->file('ownership_document')->store('apartments/ownership-documents', 'private');
+        } else {
+            unset($validated['ownership_document']);
+        }
+
+        // Handle important_files uploads
+        if ($request->hasFile('important_files')) {
+            $filePaths = [];
+            foreach ($request->file('important_files') as $file) {
+                $filePaths[] = $file->store('apartments/important-files', 'private');
+            }
+            $validated['important_files'] = $filePaths;
+        } else {
+            unset($validated['important_files']);
+        }
 
         return $validated;
     }
@@ -144,7 +169,7 @@ class ApartmentController extends Controller
         $nextOrder = (int) ($apartment->images()->max('order') ?? 0);
 
         foreach ($request->file('images') as $index => $imageFile) {
-            $path = $imageFile->store("apartments/{$apartment->id}", 'public');
+            $path = $imageFile->store("apartments/{$apartment->id}", 'private');
 
             $apartment->images()->create([
                 'path' => $path,

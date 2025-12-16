@@ -80,28 +80,26 @@
 
                                     <div>
                                         <label for="floor_plan" class="block text-sm font-medium mb-2">Floor Plan
-                                            Path (مسار مخطط الطابق)</label>
-                                        <input type="text" name="floor_plan" id="floor_plan"
-                                            value="{{ old('floor_plan') }}"
+                                            (مخطط الطابق)</label>
+                                        <input type="file" name="floor_plan" id="floor_plan"
                                             class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                            placeholder="storage/floor-plans/a101.pdf">
+                                            accept=".pdf,.jpg,.jpeg,.png">
                                     </div>
 
                                     <div>
                                         <label for="ownership_document" class="block text-sm font-medium mb-2">Ownership
-                                            Document Path (مسار سند الملكية)</label>
-                                        <input type="text" name="ownership_document" id="ownership_document"
-                                            value="{{ old('ownership_document') }}"
+                                            Document (سند الملكية)</label>
+                                        <input type="file" name="ownership_document" id="ownership_document"
                                             class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                            placeholder="storage/ownership/a101.pdf">
+                                            accept=".pdf,.jpg,.jpeg,.png">
                                     </div>
 
                                     <div class="md:col-span-2">
                                         <label for="important_files" class="block text-sm font-medium mb-2">Important
-                                            Files (الملفات المهمة) (مفصولة بفاصلة)</label>
-                                        <textarea name="important_files" id="important_files" rows="2"
-                                            class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                            placeholder="safety_certificate.pdf, insurance.pdf">{{ old('important_files') }}</textarea>
+                                            Files (الملفات المهمة)</label>
+                                        <input type="file" name="important_files[]" id="important_files" multiple
+                                            class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        <p class="text-xs text-gray-500 mt-1">You can select multiple files (PDFs, images, documents)</p>
                                     </div>
                                 </div>
                             </div>

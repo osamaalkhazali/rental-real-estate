@@ -84,7 +84,7 @@
                                     <dt class="font-medium w-1/3">Receipt (الإيصال):</dt>
                                     <dd>
                                         @if ($leasePayment->receipt_file)
-                                            <a href="{{ asset('storage/' . $leasePayment->receipt_file) }}" target="_blank"
+                                            <a href="{{ route('private.file', $leasePayment->receipt_file) }}" target="_blank"
                                                 class="text-blue-600 hover:text-blue-900 dark:text-blue-400">
                                                 View Receipt
                                             </a>

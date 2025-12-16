@@ -101,7 +101,7 @@
                             @if ($leasePayment->receipt_file)
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium mb-2">Current Receipt File (الإيصال الحالي)</label>
-                                    <a href="{{ asset('storage/' . $leasePayment->receipt_file) }}" target="_blank"
+                                    <a href="{{ route('private.file', $leasePayment->receipt_file) }}" target="_blank"
                                         class="text-blue-600 hover:text-blue-900 dark:text-blue-400">
                                         View Current Receipt
                                     </a>

@@ -83,25 +83,49 @@
 
                                     <div>
                                         <label for="floor_plan" class="block text-sm font-medium mb-2">Floor Plan
-                                            Path (مسار مخطط الطابق)</label>
-                                        <input type="text" name="floor_plan" id="floor_plan"
-                                            value="{{ old('floor_plan', $apartment->floor_plan) }}"
-                                            class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                            (مخطط الطابق)</label>
+                                        <input type="file" name="floor_plan" id="floor_plan"
+                                            class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                            accept=".pdf,.jpg,.jpeg,.png">
+                                        @if ($apartment->floor_plan)
+                                            <p class="text-xs text-gray-500 mt-1">Current: <a
+                                                    href="{{ route('private.file', $apartment->floor_plan) }}" target="_blank"
+                                                    class="text-blue-600 dark:text-blue-400 underline">{{ basename($apartment->floor_plan) }}</a></p>
+                                        @endif
                                     </div>
 
                                     <div>
                                         <label for="ownership_document" class="block text-sm font-medium mb-2">Ownership
-                                            Document Path (مسار سند الملكية)</label>
-                                        <input type="text" name="ownership_document" id="ownership_document"
-                                            value="{{ old('ownership_document', $apartment->ownership_document) }}"
-                                            class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                            Document (سند الملكية)</label>
+                                        <input type="file" name="ownership_document" id="ownership_document"
+                                            class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                            accept=".pdf,.jpg,.jpeg,.png">
+                                        @if ($apartment->ownership_document)
+                                            <p class="text-xs text-gray-500 mt-1">Current: <a
+                                                    href="{{ route('private.file', $apartment->ownership_document) }}" target="_blank"
+                                                    class="text-blue-600 dark:text-blue-400 underline">{{ basename($apartment->ownership_document) }}</a></p>
+                                        @endif
                                     </div>
 
                                     <div class="md:col-span-2">
                                         <label for="important_files" class="block text-sm font-medium mb-2">Important
-                                            Files (الملفات المهمة) (مفصولة بفاصلة)</label>
-                                        <textarea name="important_files" id="important_files" rows="2"
-                                            class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('important_files', implode(', ', $apartment->important_files ?? [])) }}</textarea>
+                                            Files (الملفات المهمة)</label>
+                                        <input type="file" name="important_files[]" id="important_files" multiple
+                                            class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        <p class="text-xs text-gray-500 mt-1">You can select multiple files (PDFs, images, documents)</p>
+                                        @if (!empty($apartment->important_files))
+                                            <div class="mt-2">
+                                                <p class="text-xs text-gray-500 mb-1">Current files:</p>
+                                                <ul class="list-disc list-inside text-sm">
+                                                    @foreach ($apartment->important_files as $file)
+                                                        <li>
+                                                            <a href="{{ route('private.file', $file) }}" target="_blank"
+                                                                class="text-blue-600 dark:text-blue-400 underline">{{ basename($file) }}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
