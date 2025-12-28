@@ -8,10 +8,54 @@ use Illuminate\Http\Request;
 
 class WaterServiceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $waterServices = WaterService::with('apartment')->latest()->paginate(10);
-        return view('water-services.index', compact('waterServices'));
+        $query = WaterService::with('apartment');
+
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('registration_number', 'like', "%{$search}%")
+                    ->orWhere('meter_number', 'like', "%{$search}%")
+                    ->orWhereHas('apartment', function ($aq) use ($search) {
+                        $aq->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        // Filter by apartment
+        if ($request->filled('apartment_id')) {
+            $query->where('apartment_id', $request->apartment_id);
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('is_active', $request->status === 'active');
+        }
+
+        // Sorting
+        $sortField = $request->get('sort', 'created_at');
+        $sortDirection = $request->get('direction', 'desc');
+        $allowedSorts = ['apartment', 'registration_number', 'meter_number', 'is_active', 'created_at'];
+        
+        if (in_array($sortField, $allowedSorts)) {
+            if ($sortField === 'apartment') {
+                $query->orderBy(
+                    Apartment::select('name')->whereColumn('apartments.id', 'water_services.apartment_id'),
+                    $sortDirection === 'asc' ? 'asc' : 'desc'
+                );
+            } else {
+                $query->orderBy($sortField, $sortDirection === 'asc' ? 'asc' : 'desc');
+            }
+        } else {
+            $query->latest();
+        }
+
+        $waterServices = $query->paginate(10)->withQueryString();
+        $apartments = Apartment::orderBy('name')->get();
+
+        return view('water-services.index', compact('waterServices', 'apartments'));
     }
 
     public function create()

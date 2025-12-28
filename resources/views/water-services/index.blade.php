@@ -20,34 +20,101 @@
                         </div>
                     @endif
 
+                    <!-- Search and Filters -->
+                    <form method="GET" action="{{ route('water-services.index') }}" class="mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Search (بحث)</label>
+                                <input type="text" name="search" value="{{ request('search') }}"
+                                    placeholder="Registration #, meter #..."
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Apartment (الشقة)</label>
+                                <select name="apartment_id"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm text-sm">
+                                    <option value="">All</option>
+                                    @foreach ($apartments as $apartment)
+                                        <option value="{{ $apartment->id }}" {{ request('apartment_id') == $apartment->id ? 'selected' : '' }}>
+                                            {{ $apartment->display_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Status (الحالة)</label>
+                                <select name="status"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm text-sm">
+                                    <option value="">All</option>
+                                    <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
+                                    <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                </select>
+                            </div>
+                            <div class="flex items-end gap-2">
+                                <button type="submit"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm">
+                                    Filter
+                                </button>
+                                <a href="{{ route('water-services.index') }}"
+                                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-sm">
+                                    Reset
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+
                     <div class="overflow-x-auto">
                         <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-700">
                                 <tr>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        ID</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        Apartment (الشقة)</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        Registration # (رقم التسجيل)</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        Meter # (رقم العداد)</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        Status (الحالة)</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        Actions (إجراءات)</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        No. (رقم)
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        <a href="{{ route('water-services.index', array_merge(request()->query(), ['sort' => 'apartment', 'direction' => request('sort') === 'apartment' && request('direction') === 'asc' ? 'desc' : 'asc'])) }}"
+                                            class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-white">
+                                            Apartment (الشقة)
+                                            @if(request('sort') === 'apartment')
+                                                <span>{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        <a href="{{ route('water-services.index', array_merge(request()->query(), ['sort' => 'registration_number', 'direction' => request('sort') === 'registration_number' && request('direction') === 'asc' ? 'desc' : 'asc'])) }}"
+                                            class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-white">
+                                            Registration # (رقم التسجيل)
+                                            @if(request('sort') === 'registration_number')
+                                                <span>{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        <a href="{{ route('water-services.index', array_merge(request()->query(), ['sort' => 'meter_number', 'direction' => request('sort') === 'meter_number' && request('direction') === 'asc' ? 'desc' : 'asc'])) }}"
+                                            class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-white">
+                                            Meter # (رقم العداد)
+                                            @if(request('sort') === 'meter_number')
+                                                <span>{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        <a href="{{ route('water-services.index', array_merge(request()->query(), ['sort' => 'is_active', 'direction' => request('sort') === 'is_active' && request('direction') === 'asc' ? 'desc' : 'asc'])) }}"
+                                            class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-white">
+                                            Status (الحالة)
+                                            @if(request('sort') === 'is_active')
+                                                <span>{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        Actions (إجراءات)
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                @forelse($waterServices as $service)
+                                @forelse($waterServices as $index => $service)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $service->id }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $waterServices->firstItem() + $index }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             {{ $service->apartment->display_name ?? 'N/A' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">

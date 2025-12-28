@@ -12,13 +12,83 @@ use Illuminate\View\View;
 
 class ExpenseController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $expenses = Expense::with(['apartment', 'lease'])
-            ->latest('expense_date')
-            ->paginate(10);
+        $query = Expense::with(['apartment', 'lease']);
 
-        return view('expenses.index', compact('expenses'));
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('vendor_name', 'like', "%{$search}%")
+                    ->orWhereHas('apartment', function ($aq) use ($search) {
+                        $aq->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        // Filter by apartment
+        if ($request->filled('apartment_id')) {
+            $query->where('apartment_id', $request->apartment_id);
+        }
+
+        // Filter by type
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // Filter by lease
+        if ($request->filled('lease_id')) {
+            $query->where('lease_id', $request->lease_id);
+        }
+
+        // Filter by amount range
+        if ($request->filled('amount_min')) {
+            $query->where('amount', '>=', $request->amount_min);
+        }
+        if ($request->filled('amount_max')) {
+            $query->where('amount', '<=', $request->amount_max);
+        }
+
+        // Filter by date range
+        if ($request->filled('from_date')) {
+            $query->where('expense_date', '>=', $request->from_date);
+        }
+        if ($request->filled('to_date')) {
+            $query->where('expense_date', '<=', $request->to_date);
+        }
+
+        // Sorting
+        $sortField = $request->get('sort', 'expense_date');
+        $sortDirection = $request->get('direction', 'desc');
+        $allowedSorts = ['apartment', 'lease', 'title', 'type', 'expense_date', 'amount'];
+        
+        if (in_array($sortField, $allowedSorts)) {
+            if ($sortField === 'apartment') {
+                $query->orderBy(
+                    Apartment::select('name')->whereColumn('apartments.id', 'expenses.apartment_id'),
+                    $sortDirection === 'asc' ? 'asc' : 'desc'
+                );
+            } elseif ($sortField === 'lease') {
+                $query->orderBy(
+                    Lease::select('tenant_name')->whereColumn('leases.id', 'expenses.lease_id'),
+                    $sortDirection === 'asc' ? 'asc' : 'desc'
+                );
+            } else {
+                $query->orderBy($sortField, $sortDirection === 'asc' ? 'asc' : 'desc');
+            }
+        } else {
+            $query->latest('expense_date');
+        }
+
+        $expenses = $query->paginate(10)->withQueryString();
+        $apartments = Apartment::orderBy('name')->get();
+        $leases = Lease::with('apartment')->orderBy('tenant_name')->get();
+        $types = ['maintenance', 'lighting', 'furniture', 'roofing', 'fees', 'cleaning', 'painting', 'plumbing', 'electrical', 'other'];
+
+        return view('expenses.index', compact('expenses', 'apartments', 'types', 'leases'));
     }
 
     public function create(): View

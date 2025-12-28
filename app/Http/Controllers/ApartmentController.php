@@ -8,9 +8,64 @@ use Illuminate\Validation\Rule;
 
 class ApartmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $apartments = Apartment::with('leases')->latest()->paginate(10);
+        $query = Apartment::with('leases');
+
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('apartment_number', 'like', "%{$search}%")
+                    ->orWhere('location', 'like', "%{$search}%")
+                    ->orWhere('location_text', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('is_available', $request->status === 'available');
+        }
+
+        // Filter by min rent
+        if ($request->filled('min_rent')) {
+            $query->where('rent_price', '>=', $request->min_rent);
+        }
+
+        // Filter by max rent
+        if ($request->filled('max_rent')) {
+            $query->where('rent_price', '<=', $request->max_rent);
+        }
+
+        // Filter by min area
+        if ($request->filled('min_area')) {
+            $query->where('square_meters', '>=', $request->min_area);
+        }
+
+        // Filter by max area
+        if ($request->filled('max_area')) {
+            $query->where('square_meters', '<=', $request->max_area);
+        }
+
+        // Filter by location text
+        if ($request->filled('location_text')) {
+            $query->where('location_text', 'like', "%{$request->location_text}%");
+        }
+
+        // Sorting
+        $sortField = $request->get('sort', 'created_at');
+        $sortDirection = $request->get('direction', 'desc');
+        $allowedSorts = ['name', 'location_text', 'rent_price', 'square_meters', 'is_available', 'created_at'];
+        
+        if (in_array($sortField, $allowedSorts)) {
+            $query->orderBy($sortField, $sortDirection === 'asc' ? 'asc' : 'desc');
+        } else {
+            $query->latest();
+        }
+
+        $apartments = $query->paginate(10)->withQueryString();
+        
         return view('apartments.index', compact('apartments'));
     }
 

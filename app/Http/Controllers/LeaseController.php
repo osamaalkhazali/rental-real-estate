@@ -9,10 +9,75 @@ use Illuminate\Support\Facades\Storage;
 
 class LeaseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $leases = Lease::with('apartment')->latest()->paginate(10);
-        return view('leases.index', compact('leases'));
+        $query = Lease::with('apartment');
+
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('tenant_name', 'like', "%{$search}%")
+                    ->orWhere('tenant_phone', 'like', "%{$search}%")
+                    ->orWhere('tenant_email', 'like', "%{$search}%")
+                    ->orWhereHas('apartment', function ($aq) use ($search) {
+                        $aq->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        // Filter by apartment
+        if ($request->filled('apartment_id')) {
+            $query->where('apartment_id', $request->apartment_id);
+        }
+
+        // Filter by status (active/expired)
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('end_date', '>=', now());
+            } elseif ($request->status === 'expired') {
+                $query->where('end_date', '<', now());
+            }
+        }
+
+        // Filter by start date range
+        if ($request->filled('start_from')) {
+            $query->where('start_date', '>=', $request->start_from);
+        }
+        if ($request->filled('start_to')) {
+            $query->where('start_date', '<=', $request->start_to);
+        }
+
+        // Filter by end date range
+        if ($request->filled('end_from')) {
+            $query->where('end_date', '>=', $request->end_from);
+        }
+        if ($request->filled('end_to')) {
+            $query->where('end_date', '<=', $request->end_to);
+        }
+
+        // Sorting
+        $sortField = $request->get('sort', 'created_at');
+        $sortDirection = $request->get('direction', 'desc');
+        $allowedSorts = ['apartment', 'tenant_name', 'tenant_phone', 'start_date', 'end_date', 'created_at'];
+        
+        if (in_array($sortField, $allowedSorts)) {
+            if ($sortField === 'apartment') {
+                $query->orderBy(
+                    Apartment::select('name')->whereColumn('apartments.id', 'leases.apartment_id'),
+                    $sortDirection === 'asc' ? 'asc' : 'desc'
+                );
+            } else {
+                $query->orderBy($sortField, $sortDirection === 'asc' ? 'asc' : 'desc');
+            }
+        } else {
+            $query->latest();
+        }
+
+        $leases = $query->paginate(10)->withQueryString();
+        $apartments = Apartment::orderBy('name')->get();
+        
+        return view('leases.index', compact('leases', 'apartments'));
     }
 
     public function create()

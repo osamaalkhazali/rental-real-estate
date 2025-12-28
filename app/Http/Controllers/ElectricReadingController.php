@@ -9,12 +9,81 @@ use Illuminate\Support\Facades\Storage;
 
 class ElectricReadingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $electricReadings = ElectricReading::with('electricService.apartment')
-            ->latest('reading_date')
-            ->paginate(10);
-        return view('electric-readings.index', compact('electricReadings'));
+        $query = ElectricReading::with('electricService.apartment');
+
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('electricService.apartment', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by electric service
+        if ($request->filled('electric_service_id')) {
+            $query->where('electric_service_id', $request->electric_service_id);
+        }
+
+        // Filter by paid status
+        if ($request->filled('status')) {
+            $query->where('is_paid', $request->status === 'paid');
+        }
+
+        // Filter by date range
+        if ($request->filled('from_date')) {
+            $query->where('reading_date', '>=', $request->from_date);
+        }
+        if ($request->filled('to_date')) {
+            $query->where('reading_date', '<=', $request->to_date);
+        }
+
+        // Filter by reading value range
+        if ($request->filled('reading_min')) {
+            $query->where('reading_value', '>=', $request->reading_min);
+        }
+        if ($request->filled('reading_max')) {
+            $query->where('reading_value', '<=', $request->reading_max);
+        }
+
+        // Filter by cost range
+        if ($request->filled('cost_min')) {
+            $query->where('cost', '>=', $request->cost_min);
+        }
+        if ($request->filled('cost_max')) {
+            $query->where('cost', '<=', $request->cost_max);
+        }
+
+        // Sorting
+        $sortField = $request->get('sort', 'reading_date');
+        $sortDirection = $request->get('direction', 'desc');
+        $allowedSorts = ['apartment', 'meter_number', 'reading_date', 'reading_value', 'cost', 'is_paid'];
+        
+        if (in_array($sortField, $allowedSorts)) {
+            if ($sortField === 'apartment') {
+                $query->orderBy(
+                    ElectricService::select('apartments.name')
+                        ->join('apartments', 'apartments.id', '=', 'electric_services.apartment_id')
+                        ->whereColumn('electric_services.id', 'electric_readings.electric_service_id'),
+                    $sortDirection === 'asc' ? 'asc' : 'desc'
+                );
+            } elseif ($sortField === 'meter_number') {
+                $query->orderBy(
+                    ElectricService::select('meter_number')->whereColumn('electric_services.id', 'electric_readings.electric_service_id'),
+                    $sortDirection === 'asc' ? 'asc' : 'desc'
+                );
+            } else {
+                $query->orderBy($sortField, $sortDirection === 'asc' ? 'asc' : 'desc');
+            }
+        } else {
+            $query->latest('reading_date');
+        }
+
+        $electricReadings = $query->paginate(10)->withQueryString();
+        $electricServices = ElectricService::with('apartment')->get();
+
+        return view('electric-readings.index', compact('electricReadings', 'electricServices'));
     }
 
     public function create(Request $request)

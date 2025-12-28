@@ -20,45 +20,127 @@
                         </div>
                     @endif
 
+                    <!-- Search and Filters -->
+                    <form method="GET" action="{{ route('apartments.index') }}" class="mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Search (بحث)</label>
+                                <input type="text" name="search" value="{{ request('search') }}"
+                                    placeholder="Name, number, location..."
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Status (الحالة)</label>
+                                <select name="status"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm text-sm">
+                                    <option value="">All</option>
+                                    <option value="available" {{ request('status') === 'available' ? 'selected' : '' }}>Available</option>
+                                    <option value="occupied" {{ request('status') === 'occupied' ? 'selected' : '' }}>Occupied</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Location (الموقع)</label>
+                                <input type="text" name="location_text" value="{{ request('location_text') }}"
+                                    placeholder="City or area"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Min Rent (الحد الأدنى)</label>
+                                <input type="number" name="min_rent" value="{{ request('min_rent') }}" step="0.01"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Max Rent (الحد الأقصى)</label>
+                                <input type="number" name="max_rent" value="{{ request('max_rent') }}" step="0.01"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Min Area (أدنى مساحة)</label>
+                                <input type="number" name="min_area" value="{{ request('min_area') }}" step="0.01"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Max Area (أقصى مساحة)</label>
+                                <input type="number" name="max_area" value="{{ request('max_area') }}" step="0.01"
+                                    class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm text-sm">
+                            </div>
+                            <div class="flex items-end gap-2">
+                                <button type="submit"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm">
+                                    Filter
+                                </button>
+                                <a href="{{ route('apartments.index') }}"
+                                    class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-sm">
+                                    Reset
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+
                     <div class="overflow-x-auto">
                         <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-700">
                                 <tr>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                            ID (المعرف)</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                            Name (الاسم)</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                            Number (رقم الشقة)</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                            Bedrooms (غرف النوم)</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                            Bathrooms (الحمامات)</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                            Rent Price (سعر الإيجار)</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                            Status (الحالة)</th>
-                                    <th
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                            Actions (إجراءات)</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        No. (رقم)
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        <a href="{{ route('apartments.index', array_merge(request()->query(), ['sort' => 'name', 'direction' => request('sort') === 'name' && request('direction') === 'asc' ? 'desc' : 'asc'])) }}"
+                                            class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-white">
+                                            Name (الاسم)
+                                            @if(request('sort') === 'name')
+                                                <span>{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        <a href="{{ route('apartments.index', array_merge(request()->query(), ['sort' => 'location_text', 'direction' => request('sort') === 'location_text' && request('direction') === 'asc' ? 'desc' : 'asc'])) }}"
+                                            class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-white">
+                                            Location (الموقع)
+                                            @if(request('sort') === 'location_text')
+                                                <span>{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        <a href="{{ route('apartments.index', array_merge(request()->query(), ['sort' => 'square_meters', 'direction' => request('sort') === 'square_meters' && request('direction') === 'asc' ? 'desc' : 'asc'])) }}"
+                                            class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-white">
+                                            Area (المساحة)
+                                            @if(request('sort') === 'square_meters')
+                                                <span>{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        <a href="{{ route('apartments.index', array_merge(request()->query(), ['sort' => 'rent_price', 'direction' => request('sort') === 'rent_price' && request('direction') === 'asc' ? 'desc' : 'asc'])) }}"
+                                            class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-white">
+                                            Rent Price (سعر الإيجار)
+                                            @if(request('sort') === 'rent_price')
+                                                <span>{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        <a href="{{ route('apartments.index', array_merge(request()->query(), ['sort' => 'is_available', 'direction' => request('sort') === 'is_available' && request('direction') === 'asc' ? 'desc' : 'asc'])) }}"
+                                            class="flex items-center gap-1 hover:text-gray-700 dark:hover:text-white">
+                                            Status (الحالة)
+                                            @if(request('sort') === 'is_available')
+                                                <span>{{ request('direction') === 'asc' ? '↑' : '↓' }}</span>
+                                            @endif
+                                        </a>
+                                    </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        Actions (إجراءات)
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                @forelse($apartments as $apartment)
+                                @forelse($apartments as $index => $apartment)
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $apartment->id }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $apartments->firstItem() + $index }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $apartment->name }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $apartment->apartment_number }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $apartment->bedrooms }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $apartment->bathrooms }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $apartment->location ?? $apartment->location_text }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $apartment->square_meters ? $apartment->square_meters . ' m²' : 'N/A' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             JOD {{ number_format($apartment->rent_price, 2) }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">

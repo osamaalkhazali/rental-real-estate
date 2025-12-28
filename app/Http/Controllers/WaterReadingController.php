@@ -9,12 +9,81 @@ use Illuminate\Support\Facades\Storage;
 
 class WaterReadingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $waterReadings = WaterReading::with('waterService.apartment')
-            ->latest('reading_date')
-            ->paginate(10);
-        return view('water-readings.index', compact('waterReadings'));
+        $query = WaterReading::with('waterService.apartment');
+
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('waterService.apartment', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by water service
+        if ($request->filled('water_service_id')) {
+            $query->where('water_service_id', $request->water_service_id);
+        }
+
+        // Filter by paid status
+        if ($request->filled('status')) {
+            $query->where('is_paid', $request->status === 'paid');
+        }
+
+        // Filter by date range
+        if ($request->filled('from_date')) {
+            $query->where('reading_date', '>=', $request->from_date);
+        }
+        if ($request->filled('to_date')) {
+            $query->where('reading_date', '<=', $request->to_date);
+        }
+
+        // Filter by reading value range
+        if ($request->filled('reading_min')) {
+            $query->where('reading_value', '>=', $request->reading_min);
+        }
+        if ($request->filled('reading_max')) {
+            $query->where('reading_value', '<=', $request->reading_max);
+        }
+
+        // Filter by cost range
+        if ($request->filled('cost_min')) {
+            $query->where('cost', '>=', $request->cost_min);
+        }
+        if ($request->filled('cost_max')) {
+            $query->where('cost', '<=', $request->cost_max);
+        }
+
+        // Sorting
+        $sortField = $request->get('sort', 'reading_date');
+        $sortDirection = $request->get('direction', 'desc');
+        $allowedSorts = ['apartment', 'meter_number', 'reading_date', 'reading_value', 'cost', 'is_paid'];
+        
+        if (in_array($sortField, $allowedSorts)) {
+            if ($sortField === 'apartment') {
+                $query->orderBy(
+                    WaterService::select('apartments.name')
+                        ->join('apartments', 'apartments.id', '=', 'water_services.apartment_id')
+                        ->whereColumn('water_services.id', 'water_readings.water_service_id'),
+                    $sortDirection === 'asc' ? 'asc' : 'desc'
+                );
+            } elseif ($sortField === 'meter_number') {
+                $query->orderBy(
+                    WaterService::select('meter_number')->whereColumn('water_services.id', 'water_readings.water_service_id'),
+                    $sortDirection === 'asc' ? 'asc' : 'desc'
+                );
+            } else {
+                $query->orderBy($sortField, $sortDirection === 'asc' ? 'asc' : 'desc');
+            }
+        } else {
+            $query->latest('reading_date');
+        }
+
+        $waterReadings = $query->paginate(10)->withQueryString();
+        $waterServices = WaterService::with('apartment')->get();
+
+        return view('water-readings.index', compact('waterReadings', 'waterServices'));
     }
 
     public function create(Request $request)
