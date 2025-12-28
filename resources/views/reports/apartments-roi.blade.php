@@ -20,7 +20,6 @@
                             </span>
                         </div>
                     </div>
-                    
                     @php
                         $currency = fn(float $value) => 'JOD ' . number_format($value, 2);
                         $averageRoi = $totals['average_roi'];
