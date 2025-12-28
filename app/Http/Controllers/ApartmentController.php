@@ -57,7 +57,7 @@ class ApartmentController extends Controller
         $sortField = $request->get('sort', 'created_at');
         $sortDirection = $request->get('direction', 'desc');
         $allowedSorts = ['name', 'location_text', 'rent_price', 'square_meters', 'is_available', 'created_at'];
-        
+
         if (in_array($sortField, $allowedSorts)) {
             $query->orderBy($sortField, $sortDirection === 'asc' ? 'asc' : 'desc');
         } else {
@@ -65,7 +65,7 @@ class ApartmentController extends Controller
         }
 
         $apartments = $query->paginate(10)->withQueryString();
-        
+
         return view('apartments.index', compact('apartments'));
     }
 

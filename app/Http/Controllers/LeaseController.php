@@ -60,7 +60,7 @@ class LeaseController extends Controller
         $sortField = $request->get('sort', 'created_at');
         $sortDirection = $request->get('direction', 'desc');
         $allowedSorts = ['apartment', 'tenant_name', 'tenant_phone', 'start_date', 'end_date', 'created_at'];
-        
+
         if (in_array($sortField, $allowedSorts)) {
             if ($sortField === 'apartment') {
                 $query->orderBy(
@@ -76,7 +76,7 @@ class LeaseController extends Controller
 
         $leases = $query->paginate(10)->withQueryString();
         $apartments = Apartment::orderBy('name')->get();
-        
+
         return view('leases.index', compact('leases', 'apartments'));
     }
 

@@ -64,7 +64,7 @@ class ExpenseController extends Controller
         $sortField = $request->get('sort', 'expense_date');
         $sortDirection = $request->get('direction', 'desc');
         $allowedSorts = ['apartment', 'lease', 'title', 'type', 'expense_date', 'amount'];
-        
+
         if (in_array($sortField, $allowedSorts)) {
             if ($sortField === 'apartment') {
                 $query->orderBy(

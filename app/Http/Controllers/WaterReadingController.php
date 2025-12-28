@@ -59,7 +59,7 @@ class WaterReadingController extends Controller
         $sortField = $request->get('sort', 'reading_date');
         $sortDirection = $request->get('direction', 'desc');
         $allowedSorts = ['apartment', 'meter_number', 'reading_date', 'reading_value', 'cost', 'is_paid'];
-        
+
         if (in_array($sortField, $allowedSorts)) {
             if ($sortField === 'apartment') {
                 $query->orderBy(

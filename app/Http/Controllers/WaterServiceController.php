@@ -38,7 +38,7 @@ class WaterServiceController extends Controller
         $sortField = $request->get('sort', 'created_at');
         $sortDirection = $request->get('direction', 'desc');
         $allowedSorts = ['apartment', 'registration_number', 'meter_number', 'is_active', 'created_at'];
-        
+
         if (in_array($sortField, $allowedSorts)) {
             if ($sortField === 'apartment') {
                 $query->orderBy(

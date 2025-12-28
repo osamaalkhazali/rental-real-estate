@@ -78,7 +78,7 @@ class LeasePaymentController extends Controller
         $sortField = $request->get('sort', 'due_date');
         $sortDirection = $request->get('direction', 'desc');
         $allowedSorts = ['lease', 'month', 'due_date', 'payment_date', 'amount_due', 'amount_paid', 'status'];
-        
+
         if (in_array($sortField, $allowedSorts)) {
             if ($sortField === 'lease') {
                 $query->orderBy(
